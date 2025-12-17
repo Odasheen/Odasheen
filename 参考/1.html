@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时空秩序保障局 (TOAB) - 维护时间线的稳定与连续</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <style>
+        :root {
+            --primary-blue: #0a2342;
+            --secondary-blue: #1e3a5f;
+            --accent-teal: #2a9d8f;
+            --accent-light: #4cc9f0;
+            --text-light: #e9ecef;
+            --text-muted: #adb5bd;
+            --border-color: #2a4365;
+            --card-bg: rgba(26, 54, 93, 0.7);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0d1b2a 100%);
+            color: var(--text-light);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 顶部装饰性时间线 */
+        .timeline-bar {
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--accent-teal) 0%, 
+                var(--accent-light) 25%, 
+                #7209b7 50%, 
+                var(--accent-light) 75%, 
+                var(--accent-teal) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .timeline-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent);
+            animation: timeline-flow 3s infinite linear;
+        }
+        
+        @keyframes timeline-flow {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* 头部样式 */
+        header {
+            background-color: rgba(10, 35, 66, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
+            border: 2px solid var(--accent-teal);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .logo-inner {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--accent-teal);
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .logo-inner::before, .logo-inner::after {
+            content: '';
+            position: absolute;
+            background-color: var(--accent-teal);
+            border-radius: 1px;
+        }
+        
+        .logo-inner::before {
+            width: 2px;
+            height: 60%;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .logo-inner::after {
+            width: 60%;
+            height: 2px;
+            left: 20%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, var(--accent-light), var(--accent-teal));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+        
+        .logo-text .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        
+        /* 导航栏 */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--accent-light);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-teal);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-cta {
+            background-color: var(--accent-teal);
+            color: var(--primary-blue) !important;
+            padding: 0.5rem 1.5rem !important;
+            border-radius: 4px;
+            font-weight: 600 !important;
+        }
+        
+        .nav-cta:hover {
+            background-color: var(--accent-light);
+        }
+        
+        .nav-cta::after {
+            display: none;
+        }
+        
+        /* 主横幅区域 */
+        .hero {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: radial-gradient(circle at 20% 50%, rgba(42, 157, 143, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(76, 201, 240, 0.1) 0%, transparent 50%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M0,50 Q25,30 50,50 T100,50" stroke="rgba(76, 201, 240, 0.03)" fill="none" stroke-width="1"/><path d="M0,30 Q25,10 50,30 T100,30" stroke="rgba(42, 157, 143, 0.03)" fill="none" stroke-width="1"/><path d="M0,70 Q25,90 50,70 T100,70" stroke="rgba(114, 9, 183, 0.03)" fill="none" stroke-width="1"/></svg>');
+            z-index: -1;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+        
+        .hero h2 .highlight {
+            background: linear-gradient(90deg, var(--accent-light), var(--accent-teal));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.9rem 2.2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-teal);
+            color: var(--primary-blue);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 157, 143, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--accent-light);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(76, 201, 240, 0.1);
+            border-color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+        
+        /* 主要内容区域 */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        section {
+            margin: 5rem 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-teal);
+        }
+        
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 1.5rem auto 0;
+        }
+        
+        /* 任务卡片 */
+        .mission-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .mission-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mission-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-teal);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: var(--accent-teal);
+        }
+        
+        .mission-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-light);
+        }
+        
+        .mission-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .mission-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* 时间线服务 */
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .service-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .service-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .service-number {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-teal);
+            color: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .service-card h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .service-card ul {
+            list-style: none;
+            padding-left: 0.5rem;
+        }
+        
+        .service-card li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .service-card li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent-light);
+        }
+        
+        /* 新闻动态 */
+        .news-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .news-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+        
+        .news-card:hover {
+            border-color: var(--accent-teal);
+            transform: translateY(-5px);
+        }
+        
+        .news-date {
+            font-family: 'Roboto Mono', monospace;
+            color: var(--accent-teal);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .news-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .news-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        
+        .news-tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background-color: rgba(42, 157, 143, 0.2);
+            color: var(--accent-teal);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: rgba(5, 20, 40, 0.95);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 5rem;
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+        
+        .footer-column h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--accent-light);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-column a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: var(--accent-light);
+        }
+        
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 3rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .security-notice {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* 隐藏线索 */
+        .hidden-link {
+            color: transparent !important;
+            font-size: 0 !important;
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .debug-hint {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(10, 35, 66, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 10px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            z-index: 9999;
+            opacity: 0.1;
+            transition: opacity 0.5s;
+        }
+        
+        .debug-hint:hover {
+            opacity: 1;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            nav ul {
+                gap: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+            
+            .hero {
+                padding: 3rem 1rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            section {
+                margin: 3rem 0;
+            }
+            
+            .mission-card, .service-card, .news-card {
+                padding: 1.5rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .mission-cards, .services-container, .news-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 装饰性时间线 -->
+    <div class="timeline-bar"></div>
+    
+    <!-- 网站头部 -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <div class="logo">
+                    <div class="logo-inner"></div>
+                </div>
+                <div class="logo-text">
+                    <h1>时空秩序保障局</h1>
+                    <div class="subtitle">Temporal Order Assurance Bureau</div>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#about">关于我们</a></li>
+                    <li><a href="#mission">我们的使命</a></li>
+                    <li><a href="#services">时间线服务</a></li>
+                    <li><a href="#news">新闻动态</a></li>
+                    <li><a href="#careers" class="nav-cta">职业机会</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- 主横幅区域 -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>维护时间线的<span class="highlight">稳定与连续</span></h2>
+            <p>时空秩序保障局(TOAB)是致力于监控、维护和修复时间线完整性的国际组织。我们通过先进的技术手段和严格的协议，确保历史进程的稳定性和连续性，为全人类创造一个可预测且安全的未来。</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="window.location.href='#mission'">了解我们的使命</button>
+                <button class="btn btn-secondary" onclick="window.location.href='#services'">探索时间线服务</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 主要内容容器 -->
+    <div class="container">
+        <!-- 关于我们 -->
+        <section id="about">
+            <div class="section-header">
+                <h2>关于时空秩序保障局</h2>
+                <p>TOAB成立于2077年，是经国际时间治理委员会(ITGC)授权的专业机构，负责全球时间线稳定性的监控与维护工作。</p>
+            </div>
+            <div class="mission-cards">
+                <div class="mission-card">
+                    <div class="mission-icon">⏳</div>
+                    <h3>我们的起源</h3>
+                    <p>时空秩序保障局源于2080年代初期的时间物理学突破。随着时间旅行技术的理论完善，国际社会认识到必须建立一个专业机构来管理时间线干预活动，防止历史进程遭到破坏性干扰。</p>
+                    <p>TOAB是根据《2115年国际时间线保护协定》成立的独立监督机构，拥有来自47个成员国的授权，负责执行全球时间线稳定协议。</p>
+                </div>
+                <div class="mission-card">
+                    <div class="mission-icon">⚖️</div>
+                    <h3>治理与监督</h3>
+                    <p>TOAB的运作遵循《时间伦理宪章》和《非干涉基本原则》。我们的所有行动均受到国际时间治理委员会(ITGC)的严格监督，确保每一项时间线干预都符合最高伦理标准和技术规范。</p>
+                    <p>我们的治理结构包括技术执行部门、伦理监督委员会和跨学科顾问团，确保决策过程的科学性与透明度。</p>
+                </div>
+                <div class="mission-card">
+                    <div class="mission-icon">🌐</div>
+                    <h3>全球合作网络</h3>
+                    <p>TOAB与全球127个研究机构、89所顶尖大学和23个国家级时间实验室保持密切合作。我们共享时间线监测数据，协同应对跨时间维度的异常事件，共同维护人类历史的完整性。</p>
+                    <p>我们的合作伙伴包括欧洲核子研究中心时间物理部、中国科学院时空连续体研究所和麻省理工学院时间动力学实验室等顶尖机构。</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 我们的使命 -->
+        <section id="mission">
+            <div class="section-header">
+                <h2>我们的核心使命</h2>
+                <p>TOAB致力于通过专业技术手段，保护时间线免受自然和人为干扰，维护历史的连续性与真实性。</p>
+            </div>
+            <div class="services-container">
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-number">01</div>
+                        <h3>时间线监控与分析</h3>
+                    </div>
+                    <p>我们通过全球时间线监测网络(TMN)实时追踪历史进程的稳定性指标，识别潜在的时间线偏离和异常波动。</p>
+                    <ul>
+                        <li>实时监控关键历史节点的稳定性</li>
+                        <li>分析时间涟漪的传播路径与影响范围</li>
+                        <li>预测时间线分支概率与收敛点</li>
+                        <li>评估自然时间异常对历史连续性的影响</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-number">02</div>
+                        <h3>时间线修复与校准</h3>
+                    </div>
+                    <p>当检测到时间线偏离基准值时，我们的专业团队会执行精准的修复操作，恢复历史进程的正确轨迹。</p>
+                    <ul>
+                        <li>执行最小干预原则的时间线校准</li>
+                        <li>修复因自然时间异常造成的连续性断裂</li>
+                        <li>消除未经授权的时间干预造成的影响</li>
+                        <li>恢复关键历史节点的基准状态</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-number">03</div>
+                        <h3>历史完整性保护</h3>
+                    </div>
+                    <p>我们致力于保护历史记录的真实性与完整性，防止时间线篡改行为对人类集体记忆造成破坏。</p>
+                    <ul>
+                        <li>维护历史事件的官方时间线记录</li>
+                        <li>保护文化遗产免受时间干扰影响</li>
+                        <li>验证历史记录的时空一致性</li>
+                        <li>归档重大历史节点的多时间线数据</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 时间线服务 -->
+        <section id="services">
+            <div class="section-header">
+                <h2>时间线服务</h2>
+                <p>TOAB为成员国和研究机构提供专业的时间线管理服务，确保所有时间相关活动符合国际规范与安全标准。</p>
+            </div>
+            <div class="services-container">
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-number">A</div>
+                        <h3>时间线稳定性评估</h3>
+                    </div>
+                    <p>为政府机构、研究项目和重大事件提供时间线稳定性评估报告，预测时间干预可能产生的长期影响。</p>
+                    <ul>
+                        <li>重大基础设施项目时间线影响评估</li>
+                        <li>科研实验时间维度安全性认证</li>
+                        <li>历史敏感期干预可行性研究</li>
+                        <li>多时间线交叉影响分析</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-number">B</div>
+                        <h3>时间异常事件响应</h3>
+                    </div>
+                    <p>当发生时间异常事件时，TOAB的快速响应团队会在48小时内抵达现场，进行初步评估并制定干预方案。</p>
+                    <ul>
+                        <li>时间涟漪事件紧急响应</li>
+                        <li>历史断层初步评估与稳定化</li>
+                        <li>未经授权时间旅行活动调查</li>
+                        <li>时间悖论风险缓解措施</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-number">C</div>
+                        <h3>时间线数据归档</h3>
+                    </div>
+                    <p>TOAB维护着全球最完整的时间线数据库，为学术研究、历史验证和司法调查提供权威数据支持。</p>
+                    <ul>
+                        <li>关键历史节点多维度数据记录</li>
+                        <li>时间线干预活动完整档案</li>
+                        <li>时间异常事件案例数据库</li>
+                        <li>跨时间线比较研究数据服务</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 新闻动态 -->
+        <section id="news">
+            <div class="section-header">
+                <h2>新闻与动态</h2>
+                <p>了解TOAB的最新研究成果、服务更新和国际合作进展。</p>
+            </div>
+            <div class="news-container">
+                <div class="news-card">
+                    <div class="news-date">2147年8月15日</div>
+                    <h3>TOAB发布《2146年度时间线稳定性报告》</h3>
+                    <p>报告显示，2146年全球时间线稳定性指数达到98.7%，较去年提升0.3个百分点。亚洲区域的时间线波动幅度在可控范围内，欧洲历史节点连续性保持良好。</p>
+                    <span class="news-tag">报告发布</span>
+                </div>
+                <div class="news-card">
+                    <div class="news-date">2147年7月28日</div>
+                    <h3>TOAB成功修复2145-C级时间异常事件</h3>
+                    <p>针对发生在2145年12月的C级时间涟漪事件，TOAB技术团队已完成全部修复工作，受影响历史节点的连续性已恢复至基准水平。本次修复耗时6个月，动用43名时间工程师。</p>
+                    <span class="news-tag">技术成果</span>
+                </div>
+                <div class="news-card">
+                    <div class="news-date">2147年7月10日</div>
+                    <h3>TOAB与东亚时间实验室签署合作协议</h3>
+                    <p>TOAB与东亚时间实验室(ETL)签署为期五年的技术合作协议，双方将在时间线监测技术、异常事件预警系统和修复协议标准化方面展开深度合作。</p>
+                    <span class="news-tag">国际合作</span>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- 网站页脚 -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>时空秩序保障局</h4>
+                <p>致力于维护时间线的稳定与连续，保护人类历史的完整性与真实性。</p>
+                <p>国际总部：瑞士，日内瓦</p>
+                <p>成立时间：2077年</p>
+                <p>成员国：47个</p>
+            </div>
+            <div class="footer-column">
+                <h4>快速链接</h4>
+                <ul>
+                    <li><a href="#about">关于我们</a></li>
+                    <li><a href="#mission">我们的使命</a></li>
+                    <li><a href="#services">时间线服务</a></li>
+                    <li><a href="#news">新闻动态</a></li>
+                    <li><a href="#careers">职业机会</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>资源中心</h4>
+                <ul>
+                    <li><a href="#">时间线稳定性报告</a></li>
+                    <li><a href="#">时间伦理宪章</a></li>
+                    <li><a href="#">技术白皮书</a></li>
+                    <li><a href="#">研究出版物</a></li>
+                    <li><a href="#">数据申请指南</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>联系我们</h4>
+                <ul>
+                    <li><a href="mailto:info@toab.int">info@toab.int</a></li>
+                    <li><a href="tel:+41229318000">+41 22 931 8000</a></li>
+                    <li>日内瓦时间线监测中心</li>
+                    <li>紧急事件：+41 22 931 8888</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>© 2147 时空秩序保障局 (TOAB). 保留所有权利.</div>
+            <div class="security-notice">
+                <span>🔒</span>
+                <span>安全等级: <strong>绝密</strong></span>
+            </div>
+            <div>
+                <a href="#" style="color: var(--text-muted); margin-right: 1rem;">隐私政策</a>
+                <a href="#" style="color: var(--text-muted);">使用条款</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 隐藏的游戏入口线索 -->
+    <a href="system.html" class="hidden-link">内部系统入口</a>
+    <a href="debug_portal.html" class="hidden-link">调试门户</a>
+    
+    <!-- 开发者调试提示 -->
+    <div class="debug-hint">
+        <div>TOAB内部系统 v4.2.7</div>
+        <div>最后更新: 2147-08-20 04:22:17</div>
+        <div>状态: <span style="color: #2a9d8f;">运行正常</span></div>
+        <div>访问级别: 公共界面</div>
+    </div>
+    
+    <script>
+        // 简单的交互增强
+        document.addEventListener('DOMContentLoaded', function() {
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if(targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // 卡片悬停效果增强
+            const cards = document.querySelectorAll('.mission-card, .service-card, .news-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.zIndex = '10';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.zIndex = '';
+                });
+            });
+            
+            // 控制台欢迎消息（隐藏线索）
+            setTimeout(() => {
+                console.log('%c时空秩序保障局内部系统 %cv4.2.7', 'color: #4cc9f0; font-size: 16px; font-weight: bold;', 'color: #adb5bd; font-size: 12px;');
+                console.log('%c访问级别: 公共界面', 'color: #2a9d8f;');
+                console.log('%c如需访问内部系统，请使用授权凭证', 'color: #adb5bd; font-style: italic;');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

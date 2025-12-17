@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TOAB 时空秩序保障局 - 维护时间线的稳定与连续">
+    <title>TOAB - 时空秩序保障局</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/homepage.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 官网首页 -->
+    <div class="homepage-container">
+        <!-- 顶部装饰条 -->
+        <div class="timeline-bar"></div>
+        
+        <!-- 导航栏 -->
+        <header class="homepage-header">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-inner"></div>
+                    </div>
+                    <div class="logo-text">
+                        <h1>TOAB</h1>
+                        <span class="subtitle">时空秩序保障局</span>
+                    </div>
+                </div>
+                <nav class="main-nav">
+                    <a href="#about">关于我们</a>
+                    <a href="#mission">我们的使命</a>
+                    <a href="#services">服务</a>
+                    <a href="#news">新闻动态</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- 主要内容区 -->
+        <main class="homepage-main">
+            <!-- 英雄区域 -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h2 class="hero-title">维护时间线的<span class="highlight">稳定与连续</span></h2>
+                    <p class="hero-subtitle">时空秩序保障局(TOAB)是致力于监控、维护和修复时间线完整性的国际组织。我们通过先进的技术手段和严格的协议，确保历史进程的稳定性和连续性，为全人类创造一个可预测且安全的未来。</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="scrollToSection('mission')">了解我们的使命</button>
+                        <button class="btn btn-secondary" onclick="scrollToSection('services')">探索时间线服务</button>
+                    </div>
+                    <!-- 与真实历史时间挂钩的提示条 -->
+                    <div class="history-banner" id="historyToday"></div>
+                </div>
+            </section>
+
+            <!-- 关于我们 -->
+            <section id="about" class="content-section">
+                <div class="section-content">
+                    <div class="section-header">
+                        <h2>关于时空秩序保障局</h2>
+                        <p>TOAB成立于2077年，是经国际时间治理委员会(ITGC)授权的专业机构，负责全球时间线稳定性的监控与维护工作。</p>
+                    </div>
+                    <div class="mission-cards">
+                        <div class="mission-card">
+                            <div class="mission-icon">⏳</div>
+                            <h3>我们的起源</h3>
+                            <p>时空秩序保障局源于2080年代初期的时间物理学突破。随着时间旅行技术的理论完善，国际社会认识到必须建立一个专业机构来管理时间线干预活动，防止历史进程遭到破坏性干扰。</p>
+                            <p>TOAB是根据《2115年国际时间线保护协定》成立的独立监督机构，拥有来自47个成员国的授权，负责执行全球时间线稳定协议。我们的工作确保了1999-2000年跨世纪庆典、2008年全球金融危机等关键历史节点的平稳过渡。</p>
+                        </div>
+                        <div class="mission-card">
+                            <div class="mission-icon">⚖️</div>
+                            <h3>治理与监督</h3>
+                            <p>TOAB的运作遵循《时间伦理宪章》和《非干涉基本原则》。我们的所有行动均受到国际时间治理委员会(ITGC)的严格监督，确保每一项时间线干预都符合最高伦理标准和技术规范。</p>
+                            <p>我们的治理结构包括技术执行部门、伦理监督委员会和跨学科顾问团，确保决策过程的科学性与透明度。所有干预行动都经过严格的因果律分析，确保最小化对历史连续性的影响。</p>
+                        </div>
+                        <div class="mission-card">
+                            <div class="mission-icon">🌐</div>
+                            <h3>全球合作网络</h3>
+                            <p>TOAB与全球127个研究机构、89所顶尖大学和23个国家级时间实验室保持密切合作。我们共享时间线监测数据，协同应对跨时间维度的异常事件，共同维护人类历史的完整性。</p>
+                            <p>我们的合作伙伴包括欧洲核子研究中心时间物理部、中国科学院时空连续体研究所和麻省理工学院时间动力学实验室等顶尖机构。通过国际合作，我们成功维护了包括2010年代量子计算突破、2020年代全球疫情应对等重大历史节点的稳定性。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 我们的使命 -->
+            <section id="mission" class="content-section">
+                <div class="section-content">
+                    <div class="section-header">
+                        <h2>我们的核心使命</h2>
+                        <p>TOAB致力于通过专业技术手段，保护时间线免受自然和人为干扰，维护历史的连续性与真实性。</p>
+                    </div>
+                    <div class="services-container">
+                        <div class="service-card">
+                            <div class="service-header">
+                                <div class="service-number">01</div>
+                                <h3>时间线监控与分析</h3>
+                            </div>
+                            <p>我们通过全球时间线监测网络(TMN)实时追踪历史进程的稳定性指标，识别潜在的时间线偏离和异常波动。</p>
+                            <ul>
+                                <li>实时监控关键历史节点的稳定性</li>
+                                <li>分析时间涟漪的传播路径与影响范围</li>
+                                <li>预测时间线分支概率与收敛点</li>
+                                <li>评估自然时间异常对历史连续性的影响</li>
+                            </ul>
+                        </div>
+                        <div class="service-card">
+                            <div class="service-header">
+                                <div class="service-number">02</div>
+                                <h3>时间线修复与校准</h3>
+                            </div>
+                            <p>当检测到时间线偏离基准值时，我们的专业团队会执行精准的修复操作，恢复历史进程的正确轨迹。</p>
+                            <ul>
+                                <li>执行最小干预原则的时间线校准</li>
+                                <li>修复因自然时间异常造成的连续性断裂</li>
+                                <li>消除未经授权的时间干预造成的影响</li>
+                                <li>恢复关键历史节点的基准状态</li>
+                            </ul>
+                        </div>
+                        <div class="service-card">
+                            <div class="service-header">
+                                <div class="service-number">03</div>
+                                <h3>历史完整性保护</h3>
+                            </div>
+                            <p>我们致力于保护历史记录的真实性与完整性，防止时间线篡改行为对人类集体记忆造成破坏。</p>
+                            <ul>
+                                <li>维护历史事件的官方时间线记录</li>
+                                <li>保护文化遗产免受时间干扰影响</li>
+                                <li>验证历史记录的时空一致性</li>
+                                <li>归档重大历史节点的多时间线数据</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 服务 -->
+            <section id="services" class="content-section services-section">
+                <div class="section-content">
+                    <div class="section-header">
+                        <h2>时间线服务</h2>
+                        <p>TOAB为成员国和研究机构提供专业的时间线管理服务，确保所有时间相关活动符合国际规范与安全标准。</p>
+                    </div>
+                    <div class="services-grid">
+                        <div class="service-card-simple">
+                            <div class="service-icon">📊</div>
+                            <h3>时间线稳定性评估</h3>
+                            <p>为政府机构、研究项目和重大事件提供时间线稳定性评估报告，预测时间干预可能产生的长期影响。我们曾为2008年金融危机应对、2010年代科技突破等重大历史节点提供专业评估。</p>
+                        </div>
+                        <div class="service-card-simple">
+                            <div class="service-icon">⚡</div>
+                            <h3>时间异常事件响应</h3>
+                            <p>当发生时间异常事件时，TOAB的快速响应团队会在48小时内抵达现场，进行初步评估并制定干预方案。我们的响应网络覆盖全球，确保及时处理各类时间线异常。</p>
+                        </div>
+                        <div class="service-card-simple">
+                            <div class="service-icon">📚</div>
+                            <h3>时间线数据归档</h3>
+                            <p>TOAB维护着全球最完整的时间线数据库，为学术研究、历史验证和司法调查提供权威数据支持。我们的档案库包含自1999年以来的所有重大历史节点的多维度记录。</p>
+                        </div>
+                        <div class="service-card-simple">
+                            <div class="service-icon">🔬</div>
+                            <h3>因果律分析</h3>
+                            <p>采用先进的因果链追踪技术，分析历史事件的关联性和影响范围。我们的分析报告帮助决策者理解时间干预的潜在后果，确保最小化对历史连续性的影响。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 新闻动态 -->
+            <section id="news" class="content-section">
+                <div class="section-content">
+                    <div class="section-header">
+                        <h2>新闻与动态</h2>
+                        <p>了解TOAB的最新研究成果、服务更新和国际合作进展。</p>
+                    </div>
+                    <div class="news-container">
+                        <div class="news-card">
+                            <div class="news-date">2147年8月15日</div>
+                            <h3>TOAB发布《2146年度时间线稳定性报告》</h3>
+                            <p>报告显示，2146年全球时间线稳定性指数达到98.7%，较去年提升0.3个百分点。亚洲区域的时间线波动幅度在可控范围内，欧洲历史节点连续性保持良好。系统访问密钥已更新为：<strong style="color: var(--accent-teal); font-family: 'Roboto Mono', monospace;">TOAB2025SECURE</strong></p>
+                            <span class="news-tag">报告发布</span>
+                        </div>
+                        <div class="news-card">
+                            <div class="news-date">2147年7月28日</div>
+                            <h3>TOAB成功修复2145-C级时间异常事件</h3>
+                            <p>针对发生在2145年12月的C级时间涟漪事件，TOAB技术团队已完成全部修复工作，受影响历史节点的连续性已恢复至基准水平。本次修复耗时6个月，动用43名时间工程师。修复过程中，我们校准了1999-2000年跨世纪庆典的全球电视信号同步率，误差缩小至0.03秒，确保了历史记录的准确性。</p>
+                            <span class="news-tag">技术成果</span>
+                        </div>
+                        <div class="news-card">
+                            <div class="news-date">2147年7月10日</div>
+                            <h3>TOAB完成2008年金融危机时间线分析项目</h3>
+                            <p>经过长达三年的深入研究，TOAB完成了对2008年全球金融危机的全面时间线分析。报告显示，在雷曼兄弟倒闭前72小时，时间线能量签名出现异常波动，我们的团队及时进行了微调，确保了危机的可控性和后续恢复的平稳性。该分析为未来类似经济事件的预防提供了重要参考。</p>
+                            <span class="news-tag">研究项目</span>
+                        </div>
+                        <div class="news-card">
+                            <div class="news-date">2147年6月20日</div>
+                            <h3>TOAB与东亚时间实验室签署合作协议</h3>
+                            <p>TOAB与东亚时间实验室(ETL)签署为期五年的技术合作协议，双方将在时间线监测技术、异常事件预警系统和修复协议标准化方面展开深度合作。协议编号：<span style="font-family: 'Roboto Mono', monospace; color: var(--text-muted);">ETL-2147-001</span>。此次合作将进一步提升亚太地区的时间线稳定性监测能力。</p>
+                            <span class="news-tag">国际合作</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 隐藏的解密入口区域 -->
+            <section class="hidden-section" id="hiddenDecrypt">
+                <div class="decrypt-panel">
+                    <h3>🔐 系统访问验证</h3>
+                    <p class="decrypt-hint">请输入正确的访问密钥以获取系统登录凭证</p>
+                    <div class="decrypt-input-group">
+                        <input type="text" id="decryptKey" class="decrypt-input" placeholder="输入访问密钥..." autocomplete="off">
+                        <button id="decryptSubmit" class="btn-decrypt-submit">验证</button>
+                    </div>
+                    <div id="decryptResult" class="decrypt-result" style="display: none;">
+                        <div class="result-success">
+                            <h4>✓ 验证成功</h4>
+                            <div class="credentials">
+                                <p><strong>用户名：</strong><span id="revealedUsername"></span></p>
+                                <p><strong>密码：</strong><span id="revealedPassword"></span></p>
+                            </div>
+                            <button id="goToLogin" class="btn-go-login">前往登录页面</button>
+                        </div>
+                    </div>
+                    <div id="decryptError" class="decrypt-error" style="display: none;">
+                        <p>✗ 访问密钥错误，请重试</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="homepage-footer">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h4>时空秩序保障局</h4>
+                    <p>致力于维护时间线的稳定与连续，保护人类历史的完整性与真实性。</p>
+                    <p>国际总部：瑞士，日内瓦</p>
+                    <p>成立时间：2077年</p>
+                    <p>成员国：47个</p>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted);">系统版本: v2.0.5 | 最后更新: 2147-08-20</p>
+                </div>
+                <div class="footer-column">
+                    <h4>快速链接</h4>
+                    <ul>
+                        <li><a href="#about">关于我们</a></li>
+                        <li><a href="#mission">我们的使命</a></li>
+                        <li><a href="#services">服务</a></li>
+                        <li><a href="#news">新闻动态</a></li>
+                    </ul>
+                    <!-- 加入我们入口（隐藏在快速链接下方） -->
+                    <div class="join-us-link-wrapper">
+                        <a href="#" class="join-us-link" id="joinUsLink">加入我们</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>资源中心</h4>
+                    <ul>
+                        <li><a href="#">时间线稳定性报告</a></li>
+                        <li><a href="#">时间伦理宪章</a></li>
+                        <li><a href="#">技术白皮书</a></li>
+                        <li><a href="#">研究出版物</a></li>
+                        <li><a href="#">数据申请指南</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>联系我们</h4>
+                    <ul>
+                        <li><a href="mailto:info@toab.int">info@toab.int</a></li>
+                        <li><a href="tel:+41229318000">+41 22 931 8000</a></li>
+                        <li>日内瓦时间线监测中心</li>
+                        <li>紧急事件：+41 22 931 8888</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>© 2147 时空秩序保障局 (TOAB). 保留所有权利.</div>
+                <div class="security-notice">
+                    <span>🔒</span>
+                    <span>安全等级: <strong>绝密</strong></span>
+                </div>
+                <div>
+                    <a href="#" style="color: var(--text-muted); margin-right: 1rem;">隐私政策</a>
+                    <a href="#" style="color: var(--text-muted);">使用条款</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/homepage.js"></script>
+</body>
+</html>
