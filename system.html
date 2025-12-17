@@ -20,7 +20,6 @@
                 <button class="nav-btn active" data-section="dashboard">仪表板</button>
                 <button class="nav-btn" data-section="files">文件系统</button>
                 <button class="nav-btn" data-section="terminal">终端</button>
-                <button class="nav-btn" data-section="decrypt">解密工具</button>
                 <button class="nav-btn" data-section="story">任务日志</button>
             </nav>
             <div class="nav-right">
@@ -46,7 +45,7 @@
                         <div class="task-count" id="taskCount">0</div>
                     </div>
                     <div class="dashboard-card">
-                        <h3>已解密文件</h3>
+                        <h3>待外部解密的文件</h3>
                         <div class="decrypt-count" id="decryptCount">0</div>
                     </div>
                     <div class="dashboard-card">
@@ -87,27 +86,6 @@
                     <div class="terminal-input-line">
                         <span class="terminal-prompt">root@toab:~$</span>
                         <input type="text" class="terminal-input" id="terminalInput" autocomplete="off" autofocus>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 解密工具 -->
-            <section id="decrypt" class="content-section">
-                <div class="decrypt-container">
-                    <h2>代码解密工具</h2>
-                    <div class="decrypt-panel">
-                        <div class="decrypt-input-section">
-                            <label for="encryptedCode">加密代码：</label>
-                            <textarea id="encryptedCode" class="code-input" placeholder="输入需要解密的代码..."></textarea>
-                        </div>
-                        <div class="decrypt-controls">
-                            <button class="btn-decrypt" id="decryptBtn">开始解密</button>
-                            <button class="btn-clear" id="clearDecrypt">清空</button>
-                        </div>
-                        <div class="decrypt-output-section">
-                            <label for="decryptedCode">解密结果：</label>
-                            <textarea id="decryptedCode" class="code-output" readonly placeholder="解密结果将显示在这里..."></textarea>
-                        </div>
                     </div>
                 </div>
             </section>

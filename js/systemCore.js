@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
         initDashboard();
         initFileSystem();
         initTerminal();
-        initDecrypt();
         initStory();
         
         // 初始化退出按钮
@@ -75,8 +74,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (decryptCount) {
-            const progress = storage.getProgress();
-            decryptCount.textContent = progress.decryptedFiles.length;
+            // 这里统计的是当前文件系统中标记为加密的文件数量
+            const encryptedTotal = fileSystem.countEncryptedFiles 
+                ? fileSystem.countEncryptedFiles() 
+                : 0;
+            decryptCount.textContent = encryptedTotal;
         }
         
         if (logPreview) {
@@ -187,6 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     addTerminalLine('  cd <目录> - 切换目录');
                     addTerminalLine('  pwd - 显示当前路径');
                     addTerminalLine('  clear - 清空终端');
+                    addTerminalLine('  hint - 显示当前节点的使用提示');
                     break;
                     
                 case 'ls':
@@ -222,6 +225,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 case 'clear':
                     terminalBody.innerHTML = '';
                     break;
+
+                case 'hint':
+                    addTerminalLine('当前节点：TOAB 公共档案查询节点 (READ_ONLY, L0)', 'output');
+                    addTerminalLine('建议步骤：', 'output');
+                    addTerminalLine('  1) 使用 ls / cd 浏览 /root/docs 与 /root/mail 等目录', 'output');
+                    addTerminalLine('  2) 遇到带有 "Encoding:" 或 "Encryption:" 说明的文件时，将内容复制到你自己的外部解密工具中处理', 'output');
+                    addTerminalLine('  3) 结合任务日志中的说明，整理你发现的线索', 'output');
+                    break;
                     
                 case '':
                     // 空命令，不处理
@@ -247,52 +258,6 @@ document.addEventListener('DOMContentLoaded', function() {
             clearBtn.addEventListener('click', function() {
                 terminalBody.innerHTML = '';
                 addTerminalLine('欢迎使用 TOAB 终端系统', 'output');
-            });
-        }
-    }
-    
-    // 初始化解密工具
-    function initDecrypt() {
-        const encryptedCode = document.getElementById('encryptedCode');
-        const decryptedCode = document.getElementById('decryptedCode');
-        const decryptBtn = document.getElementById('decryptBtn');
-        const clearBtn = document.getElementById('clearDecrypt');
-        
-        if (!decryptBtn) return;
-        
-        decryptBtn.addEventListener('click', function() {
-            const encrypted = encryptedCode.value.trim();
-            if (!encrypted) {
-                alert('请输入需要解密的代码');
-                return;
-            }
-            
-            const result = codeDecryptor.decrypt(encrypted);
-            
-            if (result.success) {
-                decryptedCode.value = result.result;
-                
-                // 更新解密计数
-                const progress = storage.getProgress();
-                if (!progress.decryptedFiles.includes(encrypted)) {
-                    progress.decryptedFiles.push(encrypted);
-                    storage.saveProgress(progress);
-                    
-                    // 更新仪表板
-                    const decryptCount = document.getElementById('decryptCount');
-                    if (decryptCount) {
-                        decryptCount.textContent = progress.decryptedFiles.length;
-                    }
-                }
-            } else {
-                alert(result.message);
-            }
-        });
-        
-        if (clearBtn) {
-            clearBtn.addEventListener('click', function() {
-                encryptedCode.value = '';
-                decryptedCode.value = '';
             });
         }
     }

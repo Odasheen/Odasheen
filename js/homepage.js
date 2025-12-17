@@ -9,15 +9,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const joinUsLink = document.getElementById('joinUsLink');
     
     // 线索系统：访问密钥隐藏在页面内容中
-    // 线索1：新闻动态中明确提到 "系统访问密钥已更新为：TOAB2025SECURE"
-    // 密钥格式：无连字符，全大写或全小写
+    // 线索1：新闻动态中明确提到 "系统访问密钥已更新为：hsy131g171g"
+    // 密钥格式：不区分大小写，允许有无连字符的轻微变体
     
-    // 有效的访问密钥（基于页面内容中的线索）
+    // 有效的访问密钥（基于页面内容中的线索）——包含贯穿全局的代号 HSY
     const validKeys = [
-        'TOAB2025SECURE',     // 新闻中明确提到的系统访问密钥（主要）
-        'toab2025secure',     // 小写版本
-        'TOAB2025',           // 简化版本（备用）
-        '2025SECURE'          // 年份+关键词（备用）
+        'hsy131g171g',        // 新闻中明确提到的系统访问密钥（主要）
+        'HSY131G171G',        // 大写版本
+        'HSY-131G-171G'       // 带连字符形式（备用）
     ];
     
     // 初始账户信息（通过解密获得）
